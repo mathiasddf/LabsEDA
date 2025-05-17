@@ -1,3 +1,4 @@
+package Ej_propuestos;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -26,5 +27,6 @@ public class Ej_propuesto02 {
             }
         }
         System.out.println();
+        scanner.close();
     }
 }

@@ -12,6 +12,7 @@ public class Ej_propuesto01 {
             calificaciones.add(scanner.nextDouble());
         }
         Collections.sort(calificaciones);
+        scanner.close();
 
         // Mediana
         double mediana;
