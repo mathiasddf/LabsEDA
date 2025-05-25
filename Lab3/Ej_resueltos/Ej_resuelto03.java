@@ -36,9 +36,11 @@ public class Ej_resuelto03 {
         List<Animal> mascotas2 = new ArrayList<Animal>();
         // List<Animal> mascotas3 = new List<Animal>(); // <-- Esto generaría error (no se puede instanciar una interfaz directamente)
 
+        // Agregamos animales a las listas
         mascotas.add(new Animal("Firulais", true));
         mascotas2.add(new Animal("Mishi", false));
 
+        // Mostrar contenido de mascotas
         System.out.println("Lista mascotas:");
         for (Animal a : mascotas) {
             System.out.println("Nombre: " + a.getNombre() + ", Género: " + (a.isGenero() ? "Macho" : "Hembra"));
