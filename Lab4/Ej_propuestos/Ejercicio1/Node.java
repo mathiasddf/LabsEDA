@@ -1,17 +1,38 @@
-package Ej_propuestos.Ejercicio1;
+package Lab4.Ej_propuestos.Ejercicio1;
 
-public class Node <T> {
-    Node<T> nextNode;
-    Node<T> lastNode;
-    private T data;
+public class Node<E> {
+    private E data;
+    private Node<E> prev;
+    private Node<E> next;
 
-    public Node(T data){
-        this.data=data;
-        this.nextNode=null;
-        this.lastNode=null;
+    public Node(E data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
     }
 
-    public T getData(){
-        return this.data;
+    // Getters y setters 
+    public E getData() {
+        return data;
+    }
+
+    public void setData(E data) {
+        this.data = data;
+    }
+
+    public Node<E> getPrev() {
+        return prev;
+    }
+
+    public void setPrev(Node<E> prev) {
+        this.prev = prev;
+    }
+
+    public Node<E> getNext() {
+        return next;
+    }
+
+    public void setNext(Node<E> next) {
+        this.next = next;
     }
 }

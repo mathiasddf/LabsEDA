@@ -1,27 +1,17 @@
-package Ejercicios.Ejercicio1;
+package Lab4.Ej_propuestos.Ejercicio1;
 
 public class Main {
-   public static void main(String[] args) {
-       DoubleLinkedList<Integer> numeros= new DoubleLinkedList<>();
+    public static void main(String[] args) {
+        DoubleLinkedList<Integer> lista = new DoubleLinkedList<>();
 
-       numeros.setNext(1);
+        // Insertar los números del 1 al 10
+        for (int i = 1; i <= 10; i++) {
+            lista.addLast(i);
+        }
 
-       printList(numeros);
-   }
-
-   public static void printList(DoubleLinkedList list)  
-    {  
-        Node currNode = list.head;  
-    
-        System.out.print("LinkedList: ");  
-    
-        // Recorre la lista enlazada (LinkedList)  
-        while (currNode != null) {  
-            // Imprime el dato en el nodo actual  
-            System.out.print(currNode.getData() + " ");  
-    
-            // Va al siguiente nodo  
-            currNode = currNode.nextNode;  
-        }  
-    }  
+        // Mostrar tamaño y recorridos
+        System.out.println("Tamaño de la lista: " + lista.size());
+        lista.printForward();
+        lista.printBackward();
+    }
 }
