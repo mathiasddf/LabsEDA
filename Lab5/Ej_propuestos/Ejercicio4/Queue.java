@@ -1,5 +1,5 @@
 package Lab5.Ej_propuestos.Ejercicio4;
-
+    
 public class Queue<E> {
     private Node<E> head;
     private Node<E> tail;
