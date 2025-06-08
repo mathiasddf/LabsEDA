@@ -25,7 +25,7 @@ public class Main {
             System.out.println("6. isFull");
             System.out.println("7. printStack");
             System.out.println("8. Salir");
-            System.out.print("Seleccione opción [1–8]: ");
+            System.out.print("Seleccione opción [1 - 8]: ");
             opcion = sc.nextInt();
             
             switch (opcion) {
