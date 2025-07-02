@@ -1,0 +1,10 @@
+{
+    "java.project.sourcePaths": [
+        ".",
+        "Lab1"
+    ],
+    "java.project.referencedLibraries": [
+        "c:\\Users\\AORUS\\Downloads\\gs-ui-swing-2.0.jar",
+        "c:\\Users\\AORUS\\Downloads\\gs-core-2.0.jar"
+    ]
+}
