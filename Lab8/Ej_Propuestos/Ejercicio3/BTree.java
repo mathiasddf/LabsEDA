@@ -1,5 +1,7 @@
 package Lab8.Ej_Propuestos.Ejercicio3;
 
+import java.util.ArrayList;
+
 public class BTree<T extends Comparable<T>> {
     private BNode<T> root;
     private int orden;
@@ -120,7 +122,6 @@ public class BTree<T extends Comparable<T>> {
         return searchRec(node.children.get(pos[0]), key);
     }
 
-    // Métodos placeholder:
     public T Min() {
         if (isEmpty()) return null;
         BNode<T> current = root;
@@ -139,8 +140,82 @@ public class BTree<T extends Comparable<T>> {
         return current.keys.get(current.count - 1);
     }
 
-    public T Predecesor(T x) { return null; }
-    public T Sucesor(T x) { return null; }
+    private BNode<T> searchWithPath(T x, ArrayList<BNode<T>> path, ArrayList<Integer> indices) {
+        BNode<T> current = root;
+        while (current != null) {
+            int i = 0;
+            while (i < current.count && x.compareTo(current.keys.get(i)) > 0) {
+                i++;
+            }
+
+            path.add(current);
+            indices.add(i);
+
+            if (i < current.count && current.keys.get(i).compareTo(x) == 0) {
+                return current; // Encontrado
+            }
+            current = current.children.get(i);
+        }
+        return null;
+    }
+
+
+    public T Predecesor(T x) {
+        ArrayList<BNode<T>> path = new ArrayList<>();
+        ArrayList<Integer> indices = new ArrayList<>();
+        BNode<T> node = searchWithPath(x, path, indices);
+        if (node == null) return null;
+
+        int idx = indices.get(indices.size() - 1);
+        BNode<T> child = node.children.get(idx);
+
+        // Caso 1: hay hijo izquierdo → máximo de subárbol izquierdo
+        if (child != null) {
+            BNode<T> curr = child;
+            while (curr.children.get(curr.count) != null) {
+                curr = curr.children.get(curr.count);
+            }
+            return curr.keys.get(curr.count - 1);
+        }
+
+        // Caso 2: recorrer hacia arriba buscando menor a izquierda
+        for (int i = indices.size() - 2; i >= 0; i--) {
+            if (indices.get(i + 1) > 0) {
+                return path.get(i).keys.get(indices.get(i + 1) - 1);
+            }
+        }
+
+        return null; // No tiene predecesor (es el menor)
+    }
+
+    public T Sucesor(T x) {
+        ArrayList<BNode<T>> path = new ArrayList<>();
+        ArrayList<Integer> indices = new ArrayList<>();
+        BNode<T> node = searchWithPath(x, path, indices);
+        if (node == null) return null;
+
+        int idx = indices.get(indices.size() - 1);
+        BNode<T> child = node.children.get(idx + 1);
+
+        // Caso 1: hay hijo derecho → mínimo de subárbol derecho
+        if (child != null) {
+            BNode<T> curr = child;
+            while (curr.children.get(0) != null) {
+                curr = curr.children.get(0);
+            }
+            return curr.keys.get(0);
+        }
+
+        // Caso 2: recorrer hacia arriba buscando mayor a derecha
+        for (int i = indices.size() - 2; i >= 0; i--) {
+            if (indices.get(i + 1) < path.get(i).count) {
+                return path.get(i).keys.get(indices.get(i + 1));
+            }
+        }
+
+        return null; // No tiene sucesor (es el mayor)
+    }
+
     public void remove(T x) { System.out.println("Eliminación no implementada aún."); }
 }
 
