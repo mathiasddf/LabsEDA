@@ -1,5 +1,6 @@
 package Lab8.Ej_Propuestos.Ejercicio7;
 
+
 public class BPlusTree<T extends Comparable<T>> {
     private int order;
     private BPlusNode<T> root;
@@ -83,6 +84,53 @@ public class BPlusTree<T extends Comparable<T>> {
         return newNode;
     }
 
+    public void remove(T key) {
+        removeRecursive(null, root, key);
+        if (!root.isLeaf && root.children.size() == 1) {
+            root = root.children.get(0);
+        }
+    }
+
+    private boolean removeRecursive(BPlusNode<T> parent, BPlusNode<T> node, T key) {
+        if (node.isLeaf) {
+            node.keys.removeIf(k -> k.compareTo(key) == 0);
+            return node.keys.size() < (order + 1) / 2;
+        }
+
+        int idx = node.findInsertIndex(key);
+        BPlusNode<T> child = node.children.get(idx);
+        boolean underflow = removeRecursive(node, child, key);
+
+        if (underflow) {
+            BPlusNode<T> leftSibling = idx > 0 ? node.children.get(idx - 1) : null;
+            BPlusNode<T> rightSibling = idx + 1 < node.children.size() ? node.children.get(idx + 1) : null;
+
+            if (leftSibling != null && leftSibling.keys.size() > (order + 1) / 2) {
+                child.keys.add(0, leftSibling.keys.remove(leftSibling.keys.size() - 1));
+                if (!leftSibling.isLeaf) {
+                    child.children.add(0, leftSibling.children.remove(leftSibling.children.size() - 1));
+                }
+                node.keys.set(idx - 1, child.keys.get(0));
+            } else if (rightSibling != null && rightSibling.keys.size() > (order + 1) / 2) {
+                child.keys.add(rightSibling.keys.remove(0));
+                if (!rightSibling.isLeaf) {
+                    child.children.add(rightSibling.children.remove(0));
+                }
+                node.keys.set(idx, rightSibling.keys.get(0));
+            } else {
+                if (leftSibling != null) {
+                    FuzeNode(leftSibling, child, node.keys.remove(idx - 1));
+                    node.children.remove(idx);
+                } else if (rightSibling != null) {
+                    FuzeNode(child, rightSibling, node.keys.remove(idx));
+                    node.children.remove(idx + 1);
+                }
+            }
+        }
+
+        return node != root && node.keys.size() < (order + 1) / 2;
+    }
+
     public T Min() {
         BPlusNode<T> node = root;
         while (!node.isLeaf) node = node.children.get(0);
@@ -139,7 +187,9 @@ public class BPlusTree<T extends Comparable<T>> {
     }
 
     public void FuzeNode(BPlusNode<T> left, BPlusNode<T> right, T parentKey) {
-        left.keys.add(parentKey);
+        if (!left.isLeaf) {
+            left.keys.add(parentKey);
+        }
         left.keys.addAll(right.keys);
         if (!left.isLeaf) {
             left.children.addAll(right.children);
