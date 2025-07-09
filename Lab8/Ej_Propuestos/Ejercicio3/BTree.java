@@ -340,6 +340,36 @@ public class BTree<T extends Comparable<T>> {
         parent.count--;
     }
 
+    public void printTree() {
+    if (isEmpty()) {
+        System.out.println("Árbol vacío.");
+    } else {
+        printRecursive(root, 0);
+    }
+}
+
+private void printRecursive(BNode<T> node, int level) {
+    if (node == null) return;
+
+    // Imprime el nodo actual
+    System.out.println("    ".repeat(level) + "Nivel " + level + ": " + nodeString(node));
+
+    // Imprime sus hijos
+    for (int i = 0; i <= node.count; i++) {
+        printRecursive(node.children.get(i), level + 1);
+    }
+}
+
+private String nodeString(BNode<T> node) {
+    StringBuilder sb = new StringBuilder("[");
+    for (int i = 0; i < node.count; i++) {
+        sb.append(node.keys.get(i));
+        if (i < node.count - 1) sb.append(", ");
+    }
+    sb.append("]");
+    return sb.toString();
+}
+
 
 
 }
