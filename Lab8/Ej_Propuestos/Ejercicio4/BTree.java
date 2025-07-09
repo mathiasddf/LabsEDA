@@ -318,15 +318,18 @@ public class BTree<T extends Comparable<T>> {
         }
     }
 
+
     public <E> E graficar(E retorno) {
         if (isEmpty()) {
             System.out.println("Árbol vacío, nada que graficar.");
             return retorno;
         }
 
+        posX = 0; // Reiniciar contador horizontal
         System.setProperty("org.graphstream.ui", "swing");
         Graph graph = new SingleGraph("Árbol B");
-        graficarNodo(graph, root, "R", 0);
+
+        graficarNodo(graph, root, "R", 0); // "R" es ID del nodo raíz
 
         graph.setAttribute("ui.stylesheet", """
             node {
@@ -346,27 +349,60 @@ public class BTree<T extends Comparable<T>> {
         return retorno;
     }
 
+    private int posX = 0; // contador horizontal global
+
     private void graficarNodo(Graph graph, BNode<T> node, String nodeId, int nivel) {
-        if (node == null) return;
+    if (node == null) return;
 
-        StringBuilder label = new StringBuilder();
-        for (int i = 0; i < node.count; i++) {
-            label.append(node.keys.get(i));
-            if (i < node.count - 1) label.append(" | ");
+    List<String> childIds = new ArrayList<>();
+
+    // Recorremos todos los hijos izquierdos antes del nodo actual
+    for (int i = 0; i < node.count; i++) {
+        BNode<T> child = node.children.get(i);
+        if (child != null) {
+            String childId = nodeId + "_" + i;
+            graficarNodo(graph, child, childId, nivel + 1);
+            childIds.add(childId);
+        } else {
+            childIds.add(null);
         }
+    }
 
-        Node visualNode = graph.addNode(nodeId);
-        visualNode.setAttribute("ui.label", label.toString());
+    // Ahora dibujamos el nodo actual
+    StringBuilder label = new StringBuilder();
+    for (int i = 0; i < node.count; i++) {
+        label.append(node.keys.get(i));
+        if (i < node.count - 1) label.append(" | ");
+    }
 
-        for (int i = 0; i <= node.count; i++) {
-            BNode<T> child = node.children.get(i);
-            if (child != null) {
-                String childId = nodeId + "_" + i;
-                graficarNodo(graph, child, childId, nivel + 1);
-                String edgeId = nodeId + "-" + childId;
-                if (graph.getEdge(edgeId) == null)
-                    graph.addEdge(edgeId, nodeId, childId, true);
+    Node visualNode = graph.addNode(nodeId);
+    visualNode.setAttribute("ui.label", label.toString());
+
+    double y = -nivel * 3.0;
+    double x = posX * 4.0;
+    visualNode.setAttribute("xy", x, y);
+    posX++;
+
+    // Ahora recorremos el último hijo derecho
+    BNode<T> rightChild = node.children.get(node.count);
+    if (rightChild != null) {
+        String childId = nodeId + "_" + node.count;
+        graficarNodo(graph, rightChild, childId, nivel + 1);
+        childIds.add(childId);
+    } else {
+        childIds.add(null);
+    }
+
+    // Dibujar aristas hacia los hijos
+    for (int i = 0; i <= node.count; i++) {
+        if (childIds.get(i) != null) {
+            String edgeId = nodeId + "-" + childIds.get(i);
+            if (graph.getEdge(edgeId) == null) {
+                graph.addEdge(edgeId, nodeId, childIds.get(i), true);
             }
         }
     }
+}
+
+
 }
