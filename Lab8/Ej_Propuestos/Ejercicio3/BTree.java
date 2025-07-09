@@ -216,6 +216,131 @@ public class BTree<T extends Comparable<T>> {
         return null; // No tiene sucesor (es el mayor)
     }
 
-    public void remove(T x) { System.out.println("Eliminación no implementada aún."); }
+    public void remove(T x) {
+        if (isEmpty()) {
+            System.out.println("Árbol vacío.");
+            return;
+        }
+
+        removeRecursive(root, x);
+
+        // Si la raíz queda vacía y tiene hijos, se reduce el nivel del árbol
+        if (root.count == 0) {
+            if (root.children.get(0) != null) {
+                root = root.children.get(0);
+            } else {
+                root = null;
+            }
+        }
+    }
+
+    private boolean removeRecursive(BNode<T> node, T x) {
+        int i = 0;
+        while (i < node.count && x.compareTo(node.keys.get(i)) > 0) i++;
+
+        // Caso 1: clave encontrada en este nodo
+        if (i < node.count && node.keys.get(i).compareTo(x) == 0) {
+            if (node.children.get(i) == null) {
+                // Caso 1a: nodo hoja
+                for (int j = i; j < node.count - 1; j++) {
+                    node.keys.set(j, node.keys.get(j + 1));
+                }
+                node.keys.set(node.count - 1, null);
+                node.count--;
+            } else {
+                // Caso 1b: nodo interno - usar predecesor
+                BNode<T> predNode = node.children.get(i);
+                while (predNode.children.get(predNode.count) != null) {
+                    predNode = predNode.children.get(predNode.count);
+                }
+                T pred = predNode.keys.get(predNode.count - 1);
+                node.keys.set(i, pred);
+                removeRecursive(node.children.get(i), pred);
+            }
+        } else {
+            // Caso 2: clave no encontrada en este nodo
+            if (node.children.get(i) == null) {
+                System.out.println("Clave no encontrada.");
+                return false;
+            }
+
+            BNode<T> child = node.children.get(i);
+
+            // Si el hijo tiene el mínimo de claves, preparar antes de descender
+            if (child.count == (orden - 1) / 2) {
+                if (i > 0 && node.children.get(i - 1).count > (orden - 1) / 2) {
+                    // Redistribuir desde hermano izquierdo
+                    BNode<T> left = node.children.get(i - 1);
+                    for (int j = child.count; j > 0; j--) {
+                        child.keys.set(j, child.keys.get(j - 1));
+                        child.children.set(j + 1, child.children.get(j));
+                    }
+                    child.children.set(1, child.children.get(0));
+                    child.keys.set(0, node.keys.get(i - 1));
+                    child.children.set(0, left.children.get(left.count));
+                    node.keys.set(i - 1, left.keys.get(left.count - 1));
+                    left.keys.set(left.count - 1, null);
+                    left.children.set(left.count, null);
+                    left.count--;
+                    child.count++;
+                } else if (i < node.count && node.children.get(i + 1).count > (orden - 1) / 2) {
+                    // Redistribuir desde hermano derecho
+                    BNode<T> right = node.children.get(i + 1);
+                    child.keys.set(child.count, node.keys.get(i));
+                    child.children.set(child.count + 1, right.children.get(0));
+                    node.keys.set(i, right.keys.get(0));
+                    for (int j = 0; j < right.count - 1; j++) {
+                        right.keys.set(j, right.keys.get(j + 1));
+                        right.children.set(j, right.children.get(j + 1));
+                    }
+                    right.children.set(right.count - 1, right.children.get(right.count));
+                    right.keys.set(right.count - 1, null);
+                    right.children.set(right.count, null);
+                    right.count--;
+                    child.count++;
+                } else {
+                    // Fusión
+                    if (i < node.count) {
+                        merge(node, i);
+                    } else {
+                        merge(node, i - 1);
+                        child = node.children.get(i - 1);
+                    }
+                }
+            }
+            // Descendemos al hijo actualizado
+            removeRecursive(child, x);
+        }
+        return true;
+    }
+
+    private void merge(BNode<T> parent, int idx) {
+        BNode<T> left = parent.children.get(idx);
+        BNode<T> right = parent.children.get(idx + 1);
+
+        // Traer la clave del padre al centro del nodo izquierdo
+        left.keys.set(left.count, parent.keys.get(idx));
+
+        // Mover claves e hijos del derecho al izquierdo
+        for (int i = 0; i < right.count; i++) {
+            left.keys.set(left.count + 1 + i, right.keys.get(i));
+            left.children.set(left.count + 1 + i, right.children.get(i));
+        }
+        left.children.set(left.count + 1 + right.count, right.children.get(right.count));
+
+        left.count += 1 + right.count;
+
+        // Eliminar clave del padre
+        for (int i = idx; i < parent.count - 1; i++) {
+            parent.keys.set(i, parent.keys.get(i + 1));
+            parent.children.set(i + 1, parent.children.get(i + 2));
+        }
+        parent.keys.set(parent.count - 1, null);
+        parent.children.set(parent.count, null);
+        parent.count--;
+    }
+
+
+
 }
 
