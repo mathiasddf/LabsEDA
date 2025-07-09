@@ -121,8 +121,24 @@ public class BTree<T extends Comparable<T>> {
     }
 
     // Métodos placeholder:
-    public T Min() { return null; }
-    public T Max() { return null; }
+    public T Min() {
+        if (isEmpty()) return null;
+        BNode<T> current = root;
+        while (current.children.get(0) != null) {
+            current = current.children.get(0);
+        }
+        return current.keys.get(0);
+    }
+
+    public T Max() {
+        if (isEmpty()) return null;
+        BNode<T> current = root;
+        while (current.children.get(current.count) != null) {
+            current = current.children.get(current.count);
+        }
+        return current.keys.get(current.count - 1);
+    }
+
     public T Predecesor(T x) { return null; }
     public T Sucesor(T x) { return null; }
     public void remove(T x) { System.out.println("Eliminación no implementada aún."); }
