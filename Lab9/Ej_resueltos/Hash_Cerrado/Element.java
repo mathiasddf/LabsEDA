@@ -26,3 +26,4 @@ public class Element<T> {
         return deleted ? "X" : value.toString();
     }
 }
+

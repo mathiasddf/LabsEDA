@@ -2,36 +2,40 @@ package Lab9.Ej_resueltos.Hash_Cerrado;
 
 public class TestHashClosed {
     public static void main(String[] args) {
-        HashClosed<Integer> table = new HashClosed<>(11); // tamaño primo para mejor dispersión
+        HashClosed<Integer> table = new HashClosed<>(11); // tamaño primo
 
-        // Agregar los elementos
-        int[] elementsToInsert = {100, 5, 14, 15, 22, 16, 17, 32, 13, 32, 100};
-        System.out.println("Insertando elementos:");
-        for (int elem : elementsToInsert) {
-        boolean inserted = table.insert(elem);
-        System.out.println("Insertar " + elem + ": " + (inserted ? "✔" : "✖ (duplicado o lleno)"));
+        // Agregar elementos
+        System.out.println("=== Inserción de elementos ===");
+        int[] toInsert = {100, 5, 14, 15, 22, 16, 17, 32, 13, 32, 100};
+        for (int elem : toInsert) {
+        table.insert(elem);
         }
 
-        // Mostrar tabla hash resultante
-        System.out.println("\nTabla hash después de inserciones:");
+        // Mostrar tabla resultante
+        System.out.println("\n=== Tabla luego de inserciones ===");
         table.showTable();
 
         // Buscar elementos
-        System.out.println("\nBuscando elementos:");
-        int[] searchItems = {32, 200};
-        for (int item : searchItems) {
-        System.out.println("Buscar " + item + ": " + (table.search(item) ? "Encontrado" : "No encontrado"));
+        System.out.println("\n=== Búsqueda de elementos ===");
+        int[] toSearch = {32, 200};
+        for (int elem : toSearch) {
+        System.out.println("Buscar " + elem + ": " + (table.search(elem) ? "✔ Encontrado" : "❌ No encontrado"));
         }
 
         // Eliminar elementos
-        System.out.println("\nEliminando elementos:");
-        int[] deleteItems = {17, 100};
-        for (int item : deleteItems) {
-        System.out.println("Eliminar " + item + ": " + (table.delete(item) ? "Eliminado" : "No encontrado"));
+        System.out.println("\n=== Eliminación de elementos ===");
+        int[] toDelete = {17, 100};
+        for (int elem : toDelete) {
+        table.delete(elem);
         }
 
-        // Mostrar tabla hash final
-        System.out.println("\nTabla hash después de eliminaciones:");
+        // Mostrar tabla final
+        System.out.println("\n=== Tabla luego de eliminaciones ===");
+        table.showTable();
+
+        // Prueba adicional (inserción tras eliminación)
+        System.out.println("\n=== Inserción tras eliminaciones (prueba adicional) ===");
+        table.insert(77); // debe ocupar una posición eliminada
         table.showTable();
     }
 }
