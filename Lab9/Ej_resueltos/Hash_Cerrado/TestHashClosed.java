@@ -19,7 +19,7 @@ public class TestHashClosed {
         System.out.println("\n=== Búsqueda de elementos ===");
         int[] toSearch = {32, 200};
         for (int elem : toSearch) {
-        System.out.println("Buscar " + elem + ": " + (table.search(elem) ? "✔ Encontrado" : "❌ No encontrado"));
+        System.out.println("Buscar " + elem + ": " + (table.search(elem) ? " Encontrado" : " No encontrado"));
         }
 
         // Eliminar elementos

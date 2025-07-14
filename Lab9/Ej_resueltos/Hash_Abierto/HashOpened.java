@@ -22,13 +22,13 @@ public class HashOpened<E> {
 
         for (Element<E> e : table[index]) {
         if (e.getKey() == elem.getKey() && !e.isDeleted()) {
-            System.out.println("❌ Clave duplicada: " + elem.getKey());
+            System.out.println(" Clave duplicada: " + elem.getKey());
             return;
         }
         }
 
         table[index].add(elem);
-        System.out.println("✔ Insertado: " + elem);
+        System.out.println(" Insertado: " + elem);
     }
 
     public void delete(int key) {
@@ -37,12 +37,12 @@ public class HashOpened<E> {
         for (Element<E> e : table[index]) {
         if (e.getKey() == key && !e.isDeleted()) {
             e.delete();
-            System.out.println("✔ Eliminado lógicamente: " + key);
+            System.out.println(" Eliminado lógicamente: " + key);
             return;
         }
         }
 
-        System.out.println("❌ Clave no encontrada: " + key);
+        System.out.println(" Clave no encontrada: " + key);
     }
 
     public Element<E> search(int key) {

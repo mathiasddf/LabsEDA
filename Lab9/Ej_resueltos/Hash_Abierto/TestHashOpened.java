@@ -2,42 +2,39 @@ package Lab9.Ej_resueltos.Hash_Abierto;
 
 public class TestHashOpened {
     public static void main(String[] args) {
-        // Crear tabla hash de tamaño 8
-        HashOpened<String> table = new HashOpened<>(8);
+        HashOpened<String> table = new HashOpened<>(8); // tamaño solicitado
 
-        // Agregar elementos
-        System.out.println("=== Inserción de elementos ===");
+        System.out.println("=== Inserciones ===");
         table.insert(new Element<>(5, "Pepe"));
         table.insert(new Element<>(21, "Jesús"));
         table.insert(new Element<>(19, "Juan"));
         table.insert(new Element<>(16, "María"));
-        table.insert(new Element<>(21, "DUPLICADO")); // Intento duplicado
+        table.insert(new Element<>(21, "DUPLICADO")); // duplicado, debe fallar
 
-        // Mostrar tabla actual
-        System.out.println("\n=== Tabla hash resultante ===");
+        System.out.println("\n=== Mostrar tabla ===");
         table.showTable();
 
-        // Buscar elementos
-        System.out.println("\n=== Búsqueda de claves ===");
-        int[] keysToSearch = {5, 21};
-        for (int key : keysToSearch) {
-        Element<String> result = table.search(key);
-        if (result != null) {
-            System.out.println("✔ Clave " + key + " encontrada → " + result);
+        System.out.println("\n=== Búsquedas ===");
+        int[] buscar = {5, 21};
+        for (int key : buscar) {
+        Element<String> encontrado = table.search(key);
+        if (encontrado != null) {
+            System.out.println("Clave " + key + " encontrada: " + encontrado);
         } else {
-            System.out.println("❌ Clave " + key + " no encontrada");
+            System.out.println("Clave " + key + " no encontrada");
         }
         }
 
-        // Eliminar elementos
-        System.out.println("\n=== Eliminación de claves ===");
-        int[] keysToDelete = {21, 100};
-        for (int key : keysToDelete) {
-        table.delete(key);
-        }
+        System.out.println("\n=== Eliminaciones ===");
+        table.delete(21); // eliminar válido
+        table.delete(100); // no existente
 
-        // Mostrar tabla final
-        System.out.println("\n=== Tabla hash después de eliminaciones ===");
+        System.out.println("\n=== Tabla después de eliminaciones ===");
+        table.showTable();
+
+        // Prueba adicional: insertar después de eliminar
+        System.out.println("\n=== Inserción tras eliminación ===");
+        table.insert(new Element<>(21, "Nuevo Jesús"));
         table.showTable();
     }
 }

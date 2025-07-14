@@ -41,4 +41,3 @@ public class Element<T> implements Comparable<Element<T>> {
         return (deleted ? "[ELIMINADO] " : "") + key + ":" + value;
     }
 }
-
