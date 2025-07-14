@@ -78,7 +78,7 @@ public class HashOpened<E> {
     public void showTable() {
         System.out.println("\n--- Estado actual de la Tabla Hash (Abierto) ---");
         for (int i = 0; i < table.length; i++) {
-        System.out.print(i + ": ");
+        System.out.print(i + ": "); 
         if (table[i].isEmpty()) {
             System.out.println("[VACÍO]");
         } else {

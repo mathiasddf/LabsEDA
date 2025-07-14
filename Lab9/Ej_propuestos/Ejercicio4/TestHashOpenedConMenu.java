@@ -15,7 +15,7 @@ public class TestHashOpenedConMenu {
         System.out.println("3. Eliminar");
         System.out.println("4. Mostrar tabla");
         System.out.println("5. ¿Hash vacio?");
-        System.out.println("6. Limpiar tabla+");
+        System.out.println("6. Limpiar tabla");
         System.out.println("0. Salir");
         System.out.print("Elige una opción: ");
         opcion = scanner.nextInt();
